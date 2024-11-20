@@ -50,7 +50,74 @@ namespace calculator
     public class Calculator
     {
         // ---------- TODO ----------
-        
+        public int getgcd(int n1, int n2){
+            if(n1 % n2 == 0){
+                return n2;
+            }else{
+                return getgcd(n2, n1%n2);
+            }
+        }
+        public double Calculate(double num1, string op, double num2){
+            if(op=="+"){
+                return num1 + num2;
+            }
+            else if(op=="-"){
+                return num1 - num2;
+            }
+            else if(op == "*"){
+                return num1 * num2;
+            }
+            else if(op == "/"){
+                if(num2 == 0){
+                    throw new DivideByZeroException("Division by zero is not allowed");
+                }
+                else{
+                    return num1 / num2;
+                }
+            }
+            else if(op == "**"){
+                double pow_result = 1;
+                int num1_pow = (int)num1;
+                if(num2 >= 0){
+                    for(int i = 0; i < num2; i++){
+                    pow_result *= num1_pow;
+                    }
+                }else{
+                    for(int j = 0; j < -num2; j++){
+                        pow_result /= num1_pow;
+                    }
+                }
+                return pow_result;
+            }
+            else if(op=="%"){
+                int num1_per = (int)num1;
+                int num2_per = (int)num2;
+                return num1_per % num2_per;
+            }
+            else if(op =="G"){
+                int num1_G = (int)num1;
+                int num2_G = (int)num2;
+                if (num1_G >= num2_G){
+                    return getgcd(num1_G, num2_G);
+                }
+                else{
+                    return getgcd(num2_G, num1_G);
+                }
+            }
+            else if(op == "L"){
+                int num1_G = (int)num1;
+                int num2_G = (int)num2;
+                if (num1_G >= num2_G){
+                    return num1_G*num2_G/getgcd(num1_G, num2_G);
+                }
+                else{
+                    return num1_G*num2_G/getgcd(num2_G, num1_G);
+                }
+            }
+            else{
+                throw new InvalidOperationException("Invalid operator");
+            }
+        }
         // --------------------
     }
 }

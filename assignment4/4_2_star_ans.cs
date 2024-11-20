@@ -11,7 +11,62 @@ namespace star
             int size = 2 * (radius + 1);
 
             // ---------- TODO ----------
-
+            for(int i=0; i<size;i++){
+                if (i==0){
+                    for(int j=0; j < size-2;j++){
+                        Console.Write(" ");
+                    }
+                    for(int j2=0; j2<(int)size;j2++){
+                        if(j2==(int)(size/3)|j2 == (int)(2*size/3)){
+                            Console.Write("*");
+                        }
+                        else{
+                            Console.Write(" ");
+                        }
+                    }
+                    Console.Write("\n");
+                }
+                else if(i == 1|i == size-1){
+                    Console.Write(" ");
+                    for(int j=0;j<2*radius-1;j++){
+                        Console.Write("*");
+                    }
+                    for(int j2=0; j2<(int)size;j2++){
+                        if(j2==(int)(size/3)|j2 == (int)(2*size/3)){
+                            Console.Write("*");
+                        }
+                        else{
+                            Console.Write(" ");
+                        }
+                    }
+                    Console.Write("\n");
+                }
+                else if(i==(int)(size/3)|i == (int)(2*size/3)){
+                    Console.Write("*");
+                    for(int j=0; j<2*radius-1;j++){
+                        Console.Write(" ");
+                    }
+                    for(int j2=0; j2<size;j2++){
+                        Console.Write("*");
+                    }
+                    Console.Write("\n");
+                }
+                else{
+                    Console.Write("*");
+                    for(int j=0;j<2*radius-1;j++){
+                        Console.Write(" ");
+                    }
+                    for(int j2=0; j2<(int)size;j2++){
+                        if(j2==(int)(size/3)|j2 == (int)(2*size/3)){
+                            Console.Write("*");
+                        }
+                        else{
+                            Console.Write(" ");
+                        }
+                    }
+                    Console.Write("\n");
+                }
+            }
 
             // --------------------
         }
