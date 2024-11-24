@@ -19,8 +19,8 @@ public class Character : MonoBehaviour
     {
         // 좌클릭시 RemainJump를 하나 소모하여 CharacterJumpPower의 힘으로 점프한다.
         // ---------- TODO ---------- 
-        if (Input.GetMouseButton(0)) {
-            GetComponent<Rigidbody2D>().AddForce(new Vector3(0, CharacterJumpPower*0.025f, 0), ForceMode2D.Impulse);
+        if (Input.GetMouseButtonDown(0)&&RemainJump > 0) {
+            Jump(0);
             RemainJump -= 1;
         }
         // -------------------- 
