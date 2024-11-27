@@ -12,7 +12,9 @@ public class UIManager : MonoBehaviour
     void Awake() {
         // MyText를 얻어오고, 내용을 지운다.
         // ---------- TODO ---------- 
-        
+        MyText = GameObject.Find("MyText").GetComponent<Text>();
+        MyText.text = "";
+        NowCoroutine = null;
         // -------------------- 
     }
 
@@ -20,7 +22,11 @@ public class UIManager : MonoBehaviour
     {
         // NowCoroutine이 있다면 멈추고 새로운 DisplayTextCoroutine을 시작한다.
         // ---------- TODO ---------- 
-        
+        if(NowCoroutine != null)
+        {
+            StopCoroutine(NowCoroutine);
+        }
+        NowCoroutine = StartCoroutine(DisplayTextCoroutine(text, duration));
         // -------------------- 
     }
 
@@ -28,7 +34,10 @@ public class UIManager : MonoBehaviour
     {
         // MyText에 text를 duration초 동안 띄운다.
         // ---------- TODO ---------- 
-        yield return null; // dummy, remove this
+        
+        MyText.text = text;
+        yield return new WaitForSeconds(duration); // dummy, remove this
+        Awake();
         // -------------------- 
     }
 }
