@@ -40,6 +40,14 @@ public class GameManager : MonoBehaviour
         // TilePrefab을 TileParent의 자식으로 생성하고, 배치함
         // Tiles를 채움
         // --- TODO ---
+        for(int i = -4; i <= 4; i++)
+        {
+            for(int j = -4; j <= 4; j++)
+            {
+                GameObject.Instantiate(TilePrefab, new Vector3(i, j, 0), Quaternion.identity).transform.parent = TileParent;
+                Tiles[i,j] = this.gameObject.GetComponent<Tile>();
+            }
+        }
         
         // ------
 
@@ -62,6 +70,7 @@ public class GameManager : MonoBehaviour
         // Pieces를 채움
         // 배치한 Piece를 리턴
         // --- TODO ---
+        GameObject.Instantiate(PiecePrefabs[pieceType], new Vector3(pos.Item1, pos.Item2, 0),Quaternion.identity).transform.parent = PieceParent;
         
         // ------
     }
@@ -97,7 +106,14 @@ public class GameManager : MonoBehaviour
     {
         // 턴을 변경하고, UI에 표시
         // --- TODO ---
-        
+        if(CurrentTurn < 2)
+        {
+            CurrentTurn = 2;
+        }
+        else
+        {
+            CurrentTurn = 1;
+        }
         // ------
     }
 }
