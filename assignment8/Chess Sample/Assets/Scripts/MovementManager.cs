@@ -22,7 +22,32 @@ public class MovementManager : MonoBehaviour
         // 보드에 있는지, 다른 piece에 의해 막히는지 등을 체크
         // 폰에 대한 예외 처리를 적용
         // --- TODO ---
-        
+        int currentX = piece.MyPos.Item1;
+        int currentY = piece.MyPos.Item2;
+
+        for (int i = 1; i <= moveInfo.distance; i++)
+        {
+            currentX += moveInfo.dirX;
+            currentY += moveInfo.dirY;
+
+            if (!Utils.IsInBoard((currentX, currentY))) return false;
+
+            var pieceAtPos = gameManager.Pieces[currentX, currentY];
+
+            if (currentX == targetPos.Item1 && currentY == targetPos.Item2)
+            {
+                if (piece is Pawn)
+                {
+                    return moveInfo.dirX == 0 ? 
+                        pieceAtPos == null : 
+                        pieceAtPos != null && pieceAtPos.PlayerDirection != piece.PlayerDirection;
+                }
+                return pieceAtPos == null || pieceAtPos.PlayerDirection != piece.PlayerDirection;
+            }
+
+            if (pieceAtPos != null) return false;
+        }
+        return false;
         // ------
     }
 
@@ -84,7 +109,19 @@ public class MovementManager : MonoBehaviour
         // 왕이 지금 체크 상태인지를 리턴
         // gameManager.Pieces에서 Piece들을 참조하여 움직임을 확인
         // --- TODO ---
-        
+        for (int x = 0; x < Utils.FieldWidth; x++)
+        {
+            for (int y = 0; y < Utils.FieldHeight; y++)
+            {
+                var piece = gameManager.Pieces[x, y];
+                if (piece != null && piece.PlayerDirection != playerDirection)
+                {
+                    if (IsValidMoveWithoutCheck(piece, kingPos))
+                        return true;
+                }
+            }
+        }
+        return false;
         // ------
     }
 
@@ -97,7 +134,18 @@ public class MovementManager : MonoBehaviour
         // effectPrefab을 effectParent의 자식으로 생성하고 위치를 적절히 설정
         // currentEffects에 effectPrefab을 추가
         // --- TODO ---
-        
+        for (int x = 0; x < Utils.FieldWidth; x++)
+        {
+            for (int y = 0; y < Utils.FieldHeight; y++)
+            {
+                if (IsValidMove(piece, (x, y)))
+                {
+                    GameObject effect = Instantiate(effectPrefab, effectParent);
+                    effect.transform.position = Utils.ToRealPos((x, y));
+                    currentEffects.Add(effect);
+                }
+            }
+        }
         // ------
     }
 

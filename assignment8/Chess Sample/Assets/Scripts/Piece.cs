@@ -32,14 +32,9 @@ public abstract class Piece : MonoBehaviour
     {
         // direction에 따라 sprite를 결정하고, 방향을 결정함
         // --- TODO ---
-        if (PlayerDirection < 2)
-        {
-            MySpriteRenderer.sprite = WhiteSprite;
-        }
-        else
-        {
-            MySpriteRenderer.sprite = BlackSprite;
-        }
+        MySpriteRenderer.sprite = direction == 1 ? WhiteSprite : BlackSprite;
+        if (direction == -1)
+            transform.localRotation = Quaternion.Euler(0, 0, 180);
         // ------
     }
 
@@ -49,8 +44,10 @@ public abstract class Piece : MonoBehaviour
         // MyPos를 업데이트하고, targetPos로 이동
         // MyGameManager.Pieces를 업데이트
         // --- TODO ---
+        MyGameManager.Pieces[MyPos.Item1, MyPos.Item2] = null;
         MyPos = targetPos;
-        
+        transform.localPosition = Utils.ToRealPos(MyPos);
+        MyGameManager.Pieces[targetPos.Item1, targetPos.Item2] = this;
         // ------
     }
     

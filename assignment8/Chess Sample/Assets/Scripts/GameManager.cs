@@ -40,15 +40,15 @@ public class GameManager : MonoBehaviour
         // TilePrefab을 TileParent의 자식으로 생성하고, 배치함
         // Tiles를 채움
         // --- TODO ---
-        for(int i = -4; i <= 4; i++)
+        for (int i = 0; i < Utils.FieldWidth; i++)
         {
-            for(int j = -4; j <= 4; j++)
+            for (int j = 0; j < Utils.FieldHeight; j++)
             {
-                GameObject.Instantiate(TilePrefab, new Vector3(i, j, 0), Quaternion.identity).transform.parent = TileParent;
-                Tiles[i,j] = this.gameObject.GetComponent<Tile>();
+                Tile tile = Instantiate(TilePrefab, TileParent).GetComponent<Tile>();
+                tile.Set((i, j));
+                Tiles[i, j] = tile;
             }
         }
-        
         // ------
 
         PlacePieces(1);
@@ -59,7 +59,19 @@ public class GameManager : MonoBehaviour
     {
         // PlacePiece를 사용하여 Piece들을 적절한 모양으로 배치
         // --- TODO ---
+        int backRow = direction == 1 ? 0 : 7;
+        int pawnRow = direction == 1 ? 1 : 6;
         
+        for (int i = 0; i < 8; i++)
+        {
+            PlacePiece(5, (i, pawnRow), direction);
+        }
+
+        int[] backRowOrder = { 4, 3, 2, 1, 0, 2, 3, 4 };
+        for (int i = 0; i < 8; i++)
+        {
+            PlacePiece(backRowOrder[i], (i, backRow), direction);
+        }
         // ------
     }
 
@@ -70,8 +82,12 @@ public class GameManager : MonoBehaviour
         // Pieces를 채움
         // 배치한 Piece를 리턴
         // --- TODO ---
-        GameObject.Instantiate(PiecePrefabs[pieceType], new Vector3(pos.Item1, pos.Item2, 0),Quaternion.identity).transform.parent = PieceParent;
-        
+        Vector3 worldPos = Utils.ToRealPos(pos);
+        Piece piece = Instantiate(PiecePrefabs[pieceType], worldPos, 
+            Quaternion.identity, PieceParent).GetComponent<Piece>();
+        piece.initialize(pos, direction);
+        Pieces[pos.Item1, pos.Item2] = piece;
+        return piece;
         // ------
     }
 
@@ -98,6 +114,15 @@ public class GameManager : MonoBehaviour
         // 해당 위치에 다른 Piece가 있다면 삭제
         // Piece를 이동시킴
         // --- TODO ---
+        Piece targetPiece = Pieces[targetPos.Item1, targetPos.Item2];
+        if (targetPiece != null)
+        {
+            Destroy(targetPiece.gameObject);
+            Pieces[targetPos.Item1, targetPos.Item2] = null;
+        }
+        
+        piece.MoveTo(targetPos);
+        ChangeTurn();
         
         // ------
     }
@@ -106,14 +131,8 @@ public class GameManager : MonoBehaviour
     {
         // 턴을 변경하고, UI에 표시
         // --- TODO ---
-        if(CurrentTurn < 2)
-        {
-            CurrentTurn = 2;
-        }
-        else
-        {
-            CurrentTurn = 1;
-        }
+        CurrentTurn = -CurrentTurn;
+        uiManager.UpdateTurn(CurrentTurn);
         // ------
     }
 }

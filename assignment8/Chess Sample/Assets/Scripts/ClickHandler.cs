@@ -68,7 +68,23 @@ public class ClickHandler : MonoBehaviour
             // 움직일 수 없다면 selectedPiece를 originalPosition으로 이동시킴
             // effect를 초기화
             // --- TODO ---
-            
+            if (Utils.IsInBoard(boardPos))
+            {
+                if (gameManager.IsValidMove(selectedPiece, boardPos))
+                {
+                    gameManager.Move(selectedPiece, boardPos);
+                }
+                else
+                {
+                    selectedPiece.transform.position = originalPosition;
+                }
+            }
+            else
+            {
+                selectedPiece.transform.position = originalPosition;
+            }
+
+            gameManager.ClearEffects();
             // ------
             isDragging = false;
             selectedPiece = null;
